@@ -19,6 +19,21 @@
 </head>
 
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="loader-icon">KN</div>
+            <div class="loader-text">Loading</div>
+            <div class="loader-bar">
+                <span class="loader-progress"></span>
+            </div>
+            <div class="loader-decoration">
+                <i class="fas fa-code decoration-item"></i>
+                <i class="fas fa-mobile-alt decoration-item"></i>
+                <i class="fas fa-paint-brush decoration-item"></i>
+            </div>
+        </div>
+    </div>
     <!-- Progress Bar -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
@@ -947,6 +962,45 @@
                 }
             });
         }
+
+        // Preloader functionality
+        window.addEventListener('load', function () {
+            const preloader = document.querySelector('.preloader');
+            const loaderProgress = document.querySelector('.loader-progress');
+
+            if (preloader) {
+                // Animate the progress bar to 100%
+                let width = 0;
+                const interval = setInterval(function () {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        setTimeout(function () {
+                            preloader.classList.add('preloader-finish');
+                            setTimeout(function () {
+                                preloader.style.display = 'none';
+
+                                // Initialize hero elements visibility after preloader finishes
+                                document.querySelectorAll('.hero-content, .hero-image').forEach(element => {
+                                    element.classList.add('active');
+                                });
+
+                                // Start counters
+                                setTimeout(function () {
+                                    animateCounter('experienceCounter', 8, 1500);
+                                    animateCounter('projectsCounter', 50, 2000);
+                                    animateCounter('clientsCounter', 30, 1500);
+                                }, 500);
+                            }, 500);
+                        }, 600);
+                    } else {
+                        width += 2;
+                        if (loaderProgress) {
+                            loaderProgress.style.width = width + '%';
+                        }
+                    }
+                }, 40);
+            }
+        });
 
         // Helper functions
         function initializeParticles() {
