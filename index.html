@@ -88,7 +88,7 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <div class="stat-number" id="experienceCounter">8+</div>
+                        <div class="stat-number" id="experienceCounter">4+</div>
                         <div class="stat-text">Years of Experience</div>
                     </div>
                     <div class="stat-item">
@@ -160,7 +160,7 @@
                         </div>
                     </div>
                     <div class="experience-badge">
-                        <div class="experience-number">8+</div>
+                        <div class="experience-number">4+</div>
                         <div class="experience-text">Years Experience</div>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                     <p class="about-text">I'm a Senior Software Engineer with expertise in both frontend and backend
                         development, specializing in creating exceptional digital experiences that blend functionality
                         with stunning design.</p>
-                    <p class="about-text">With over 8 years of experience in the industry, I've honed my skills in
+                    <p class="about-text">With over 4 years of experience in the industry, I've honed my skills in
                         developing responsive web applications, native-like mobile apps, and robust backend systems that
                         scale efficiently.</p>
 
@@ -986,7 +986,7 @@
 
                                 // Start counters
                                 setTimeout(function () {
-                                    animateCounter('experienceCounter', 8, 1500);
+                                    animateCounter('experienceCounter', 4, 1000);
                                     animateCounter('projectsCounter', 50, 2000);
                                     animateCounter('clientsCounter', 30, 1500);
                                 }, 500);
@@ -1471,7 +1471,7 @@
                 const observeCounters = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
-                            animateCounter('experienceCounter', 8, 1000);
+                            animateCounter('experienceCounter', 4, 1000);
                             animateCounter('projectsCounter', 50, 2000);
                             animateCounter('clientsCounter', 30, 1500);
                             observeCounters.disconnect();
