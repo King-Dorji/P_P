@@ -873,7 +873,7 @@
             </div>
         </div>
         <div class="copyright">
-            <p>&copy; 2025 King'ori Ng'ang'a. All rights reserved.</p>
+            <p>&copy; <span id="currentYear"></span> King'ori Ng'ang'a. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1228,6 +1228,8 @@
                     goTop.classList.remove("active");
                 }
             }
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
 
             // Header scroll effect
             const header = document.querySelector('.header');
