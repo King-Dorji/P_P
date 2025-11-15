@@ -1,1528 +1,1416 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>King'ori Ng'ang'a | Senior Software Engineer</title>
+    <title>King'ori — Digital Craftsman</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Google Fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet">
+        html {
+            scroll-behavior: smooth;
+        }
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.4;
+            font-size: 18px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, border-color 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            width: 80px;
+            height: 80px;
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        @media (max-width: 768px) {
+            .cursor {
+                display: none;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1001;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 50px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            position: relative;
+            transition: opacity 0.3s;
+        }
+
+        .nav-menu a:hover {
+            opacity: 0.6;
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1001;
+            position: relative;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 1px;
+            background: #fff;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            transition: right 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s, transform 0.6s;
+        }
+
+        .mobile-menu.active a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu.active a:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.active a:nth-child(2) { transition-delay: 0.2s; }
+        .mobile-menu.active a:nth-child(3) { transition-delay: 0.3s; }
+        .mobile-menu.active a:nth-child(4) { transition-delay: 0.4s; }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 30px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+        }
+
+        /* Hero Section with 3D Canvas */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 60px;
+            overflow: hidden;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 12vw, 180px);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 3vw, 32px);
+            font-weight: 300;
+            color: rgba(255,255,255,0.6);
+            max-width: 700px;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            animation: fadeIn 1s 0.8s both, bounce 2s 1s infinite;
+            z-index: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 0 30px;
+                height: 100svh;
+            }
+
+            .scroll-indicator {
+                bottom: 30px;
+            }
+        }
+
+        /* Floating 3D Cards */
+        .floating-3d-card {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .floating-3d-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .card-front {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .card-back {
+            background: rgba(245, 158, 11, 0.1);
+            transform: rotateY(180deg);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(0px) translateX(-10px); }
+            75% { transform: translateY(20px) translateX(5px); }
+        }
+
+        /* Marquee */
+        .marquee {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: scroll 40s linear infinite;
+            width: fit-content;
+        }
+
+        .marquee-item {
+            font-size: clamp(40px, 8vw, 80px);
+            font-weight: 300;
+            white-space: nowrap;
+            padding: 0 60px;
+            color: rgba(255,255,255,0.15);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @media (max-width: 768px) {
+            .marquee {
+                padding: 40px 0;
+            }
+
+            .marquee-item {
+                padding: 0 30px;
+            }
+        }
+
+        /* Services Section with 3D Elements */
+        .services {
+            padding: 200px 60px;
+            position: relative;
+        }
+
+        .section-label {
+            font-size: 13px;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 100px;
+            text-transform: uppercase;
+        }
+
+        .service-item {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 80px 0;
+            display: grid;
+            grid-template-columns: 100px 1fr 400px;
+            gap: 60px;
+            align-items: start;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .service-item::before {
+            content: '';
+            position: absolute;
+            left: -60px;
+            top: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.6s;
+            pointer-events: none;
+            transform: translateY(-50%);
+        }
+
+        .service-item:hover::before {
+            opacity: 1;
+        }
+
+        .service-item:hover {
+            padding-left: 40px;
+        }
+
+        .service-number {
+            font-size: 14px;
+            color: rgba(255,255,255,0.3);
+            font-weight: 300;
+        }
+
+        .service-title {
+            font-size: clamp(28px, 5vw, 56px);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .service-item:hover .service-title {
+            transform: translateX(10px);
+        }
+
+        .service-description {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .service-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .tech-tag {
+            font-size: 12px;
+            padding: 6px 14px;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            color: rgba(255,255,255,0.6);
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transition: left 0.3s;
+        }
+
+        .service-item:hover .tech-tag {
+            border-color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.9);
+        }
+
+        .service-item:hover .tech-tag::before {
+            left: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .service-item {
+                grid-template-columns: 80px 1fr;
+                gap: 40px;
+            }
+
+            .service-description {
+                grid-column: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services {
+                padding: 120px 30px;
+            }
+
+            .section-label {
+                margin-bottom: 60px;
+            }
+
+            .service-item {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 60px 0;
+            }
+
+            .service-item:hover {
+                padding-left: 0;
+            }
+
+            .service-item::before {
+                display: none;
+            }
+
+            .service-number {
+                margin-bottom: 10px;
+            }
+        }
+
+        /* 3D Approach Section */
+        .approach {
+            padding: 200px 60px;
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #approach-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        .approach-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 100px;
+            max-width: 1600px;
+            margin: 100px auto 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .approach-item {
+            opacity: 1;
+            perspective: 1000px;
+        }
+
+        .approach-item-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .approach-item:hover .approach-item-inner {
+            transform: rotateY(5deg) rotateX(5deg);
+        }
+
+        .approach-item h3 {
+            font-size: 72px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+            line-height: 1;
+            transition: color 0.6s, transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .approach-item:hover h3 {
+            color: rgba(255,255,255,0.2);
+            transform: translateZ(30px);
+        }
+
+        .approach-item h4 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .approach-item p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.5);
+        }
+
+        @media (max-width: 1024px) {
+            .approach-grid {
+                grid-template-columns: 1fr;
+                gap: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .approach {
+                padding: 120px 30px;
+            }
+
+            .approach-grid {
+                margin-top: 60px;
+                gap: 60px;
+            }
+
+            .approach-item h3 {
+                font-size: 48px;
+            }
+        }
+
+        /* Stats with Animated Background */
+        .stats {
+            padding: 200px 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 80px;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-item {
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .stat-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .stat-item:hover .stat-inner {
+            transform: translateZ(20px);
+        }
+
+        .stat-number {
+            font-size: clamp(40px, 8vw, 96px);
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s, transform 1s;
+        }
+
+        .stat-number.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                padding: 120px 30px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+        }
+
+        /* Contact CTA with 3D Effect */
+        .contact-cta {
+            padding: 300px 60px;
+            text-align: center;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .contact-cta h2 {
+            font-size: clamp(40px, 10vw, 140px);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 60px;
+            transition: transform 0.3s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 24px 60px;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            color: #000;
+            border-color: #fff;
+            transform: translateZ(20px);
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        @media (max-width: 768px) {
+            .contact-cta {
+                padding: 180px 30px;
+            }
+
+            .contact-cta h2 {
+                margin-bottom: 40px;
+            }
+
+            .cta-button {
+                padding: 20px 50px;
+                font-size: 14px;
+            }
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 60px 60px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 80px;
+            max-width: 1600px;
+            margin: 0 auto 100px;
+        }
+
+        .footer-bio {
+            max-width: 400px;
+        }
+
+        .footer-bio h3 {
+            font-size: 20px;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+        .footer-bio p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .footer-links h4 {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 15px;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .social-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 1024px) {
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            footer {
+                padding: 80px 30px 40px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                margin-bottom: 60px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .social-links {
+                gap: 20px;
+            }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax effect */
+        .parallax {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+    </style>
 </head>
-
 <body>
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="loader">
-            <div class="loader-icon">KN</div>
-            <div class="loader-text">Loading</div>
-            <div class="loader-bar">
-                <span class="loader-progress"></span>
-            </div>
-            <div class="loader-decoration">
-                <i class="fas fa-code decoration-item"></i>
-                <i class="fas fa-mobile-alt decoration-item"></i>
-                <i class="fas fa-paint-brush decoration-item"></i>
-            </div>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">KING'ORI</div>
+        <ul class="nav-menu">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#approach">Approach</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#approach">Approach</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Hero with 3D Canvas -->
+    <section class="hero" id="home">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <h1 class="parallax">Building digital<br>products that<br>matter</h1>
+            <p class="hero-subtitle parallax">Full-stack engineer crafting seamless experiences from concept to deployment</p>
+        </div>
+        <div class="scroll-indicator">Scroll</div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span class="marquee-item">WEB DEVELOPMENT</span>
+            <span class="marquee-item">MOBILE APPS</span>
+            <span class="marquee-item">BACKEND SYSTEMS</span>
+            <span class="marquee-item">UI/UX DESIGN</span>
+            <span class="marquee-item">WEB DEVELOPMENT</span>
+            <span class="marquee-item">MOBILE APPS</span>
+            <span class="marquee-item">BACKEND SYSTEMS</span>
+            <span class="marquee-item">UI/UX DESIGN</span>
         </div>
     </div>
-    <!-- Progress Bar -->
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="container header-container">
-            <a href="#" class="logo">
-                <div class="logo-icon">KN</div>
-                King'ori
-            </a>
-            <nav>
-                <ul class="nav-menu" id="navMenu">
-                    <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
-                    <li class="nav-item"><a href="#stack" class="nav-link">Tech Stack</a></li>
-                    <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
-                    <li class="nav-item"><a href="#experience" class="nav-link">Experience</a></li>
-                    <li class="nav-item"><a href="#testimonials" class="nav-link">Testimonials</a></li>
-                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
-                    <button class="theme-toggle" id="themeToggle">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                </ul>
-                <button class="hamburger" id="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-bg">
-            <div class="hero-shape shape-1"></div>
-            <div class="hero-shape shape-2"></div>
-            <div class="hero-shape shape-3"></div>
-            <div id="particles-js"></div>
-        </div>
-        <div class="container hero-container">
-            <div class="hero-content slide-in-left">
-                <span class="hero-subtitle">Senior Software Engineer</span>
-                <h1 class="hero-title">Hi, I'm <span class="typing-text">King'ori Ng'ang'a</span></h1>
-                <p class="hero-description">Crafting exceptional digital experiences with clean code and innovative
-                    designs for web and mobile platforms.</p>
-                <div class="hero-btns">
-                    <a href="#projects" class="btn"><i class="fas fa-eye"></i> View My Work</a>
-                    <a href="#contact" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Get In Touch</a>
-                </div>
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number" id="experienceCounter">4+</div>
-                        <div class="stat-text">Years of Experience</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="projectsCounter">50+</div>
-                        <div class="stat-text">Projects Completed</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="clientsCounter">30+</div>
-                        <div class="stat-text">Happy Clients</div>
-                    </div>
+    <!-- Services -->
+    <section class="services" id="services">
+        <div class="section-label fade-in">What I Do</div>
+        
+        <div class="service-item fade-in">
+            <div class="service-number">01</div>
+            <div>
+                <h3 class="service-title">Web Applications</h3>
+                <div class="service-tech">
+                    <span class="tech-tag">React</span>
+                    <span class="tech-tag">Next.js</span>
+                    <span class="tech-tag">Vue</span>
+                    <span class="tech-tag">TypeScript</span>
                 </div>
             </div>
-            <div class="hero-image slide-in-right">
-                <div class="hero-img-wrapper">
-                    <div class="hero-img-overlay"></div>
-                    <div class="particles-container">
-                        <div id="particles-tech" class="particles-tech"></div>
-                    </div>
+            <p class="service-description">High-performance web applications built with modern frameworks. Fast, responsive, and designed to scale with your business.</p>
+        </div>
+
+        <div class="service-item fade-in">
+            <div class="service-number">02</div>
+            <div>
+                <h3 class="service-title">Mobile Development</h3>
+                <div class="service-tech">
+                    <span class="tech-tag">React Native</span>
+                    <span class="tech-tag">Swift</span>
+                    <span class="tech-tag">iOS</span>
+                    <span class="tech-tag">Android</span>
                 </div>
-                <div class="floating-card frontend card-1">
-                    <div class="icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <div class="floating-card-text">
-                        <h3>Frontend Expert</h3>
-                        <p>Web & Mobile</p>
-                    </div>
+            </div>
+            <p class="service-description">Native-quality mobile experiences that users love. Cross-platform development for maximum reach and efficiency.</p>
+        </div>
+
+        <div class="service-item fade-in">
+            <div class="service-number">03</div>
+            <div>
+                <h3 class="service-title">Backend Engineering</h3>
+                <div class="service-tech">
+                    <span class="tech-tag">Golang</span>
+                    <span class="tech-tag">Elixir</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                    <span class="tech-tag">AWS</span>
                 </div>
-                <div class="floating-card backend card-2">
-                    <div class="icon">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <div class="floating-card-text">
-                        <h3>Backend Developer</h3>
-                        <p>Golang & Elixir</p>
-                    </div>
+            </div>
+            <p class="service-description">Robust server-side architecture that powers your application. Scalable, secure, and built for reliability.</p>
+        </div>
+
+        <div class="service-item fade-in">
+            <div class="service-number">04</div>
+            <div>
+                <h3 class="service-title">Product Design</h3>
+                <div class="service-tech">
+                    <span class="tech-tag">Figma</span>
+                    <span class="tech-tag">UI/UX</span>
+                    <span class="tech-tag">Design Systems</span>
                 </div>
-                <div class="floating-card design card-3">
-                    <div class="icon">
-                        <i class="fas fa-paint-brush"></i>
-                    </div>
-                    <div class="floating-card-text">
-                        <h3>UI/UX Designer</h3>
-                        <p>Creative Solutions</p>
-                    </div>
+            </div>
+            <p class="service-description">Thoughtful interfaces that solve real problems. User-centered design from wireframes to final pixels.</p>
+        </div>
+    </section>
+
+    <!-- Approach with 3D Background -->
+    <section class="approach" id="approach">
+        <canvas id="approach-canvas"></canvas>
+        <div class="section-label fade-in">How I Work</div>
+        <div class="approach-grid">
+            <div class="approach-item fade-in">
+                <div class="approach-item-inner">
+                    <h3>01</h3>
+                    <h4>Understand</h4>
+                    <p>Every project starts with understanding your vision, users, and business goals. I dive deep into what makes your idea unique.</p>
+                </div>
+            </div>
+            <div class="approach-item fade-in">
+                <div class="approach-item-inner">
+                    <h3>02</h3>
+                    <h4>Design</h4>
+                    <p>Crafting intuitive experiences that feel natural. Prototyping and iterating until we nail the right solution.</p>
+                </div>
+            </div>
+            <div class="approach-item fade-in">
+                <div class="approach-item-inner">
+                    <h3>03</h3>
+                    <h4>Build</h4>
+                    <p>Writing clean, maintainable code. Launching fast, iterating constantly, and optimizing for performance.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="about section">
-        <div class="about-bg">
-            <div class="about-shape about-shape-1"></div>
-            <div class="about-shape about-shape-2"></div>
-        </div>
-        <div class="container">
-            <h2 class="section-title"><span>Who I Am</span>About Me</h2>
-            <div class="about-container">
-                <div class="about-image fade-in">
-                    <div class="tech-cube-container">
-                        <div class="cube">
-                            <div class="face front"><i class="fas fa-code"></i></div>
-                            <div class="face back"><i class="fab fa-react"></i></div>
-                            <div class="face right"><i class="fas fa-code"></i></div>
-                            <div class="face left"><i class="fas fa-mobile-alt"></i></div>
-                            <div class="face top"><i class="fab fa-node-js"></i></div>
-                            <div class="face bottom"><i class="fas fa-database"></i></div>
-                        </div>
-                    </div>
-                    <div class="experience-badge">
-                        <div class="experience-number">4+</div>
-                        <div class="experience-text">Years Experience</div>
-                    </div>
+    <!-- Stats -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <div class="stat-inner">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">PROJECTS SHIPPED</div>
                 </div>
-                <div class="about-content fade-in">
-                    <h3>Passionate Software Engineer & Designer</h3>
-                    <p class="about-text">I'm a Senior Software Engineer with expertise in both frontend and backend
-                        development, specializing in creating exceptional digital experiences that blend functionality
-                        with stunning design.</p>
-                    <p class="about-text">With over 4 years of experience in the industry, I've honed my skills in
-                        developing responsive web applications, native-like mobile apps, and robust backend systems that
-                        scale efficiently.</p>
-
-                    <div class="about-list">
-                        <div class="about-item">
-                            <div class="about-icon">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="about-item-text">
-                                <h4>Frontend Development</h4>
-                                <p>Creating responsive, accessible, and performant user interfaces with modern
-                                    frameworks and tools.</p>
-                            </div>
-                        </div>
-                        <div class="about-item">
-                            <div class="about-icon">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="about-item-text">
-                                <h4>Mobile Development</h4>
-                                <p>Building cross-platform and native mobile applications with a focus on performance
-                                    and user experience.</p>
-                            </div>
-                        </div>
-                        <div class="about-item">
-                            <div class="about-icon">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="about-item-text">
-                                <h4>Backend Engineering</h4>
-                                <p>Developing scalable, secure, and efficient backend systems using Golang and Elixir.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3>Technical Skills</h3>
-                    <div class="skills">
-                        <span class="skill"><i class="fab fa-js"></i> JavaScript</span>
-                        <span class="skill"><i class="fab fa-react"></i> React</span>
-                        <span class="skill"><i class="fab fa-vuejs"></i> Vue.js</span>
-                        <span class="skill"><i class="fab fa-react"></i> React Native</span>
-                        <span class="skill"><i class="fab fa-swift"></i> Swift</span>
-                        <span class="skill"><i class="fas fa-code"></i> Golang</span>
-                        <span class="skill"><i class="fas fa-bolt"></i> Elixir</span>
-                        <span class="skill"><i class="fas fa-database"></i> PostgreSQL</span>
-                        <span class="skill"><i class="fab fa-sass"></i> Sass</span>
-                        <span class="skill"><i class="fab fa-figma"></i> Figma</span>
-                        <span class="skill"><i class="fas fa-code-branch"></i> Git</span>
-                        <span class="skill"><i class="fab fa-docker"></i> Docker</span>
-                    </div>
+            </div>
+            <div class="stat-item fade-in">
+                <div class="stat-inner">
+                    <div class="stat-number">30+</div>
+                    <div class="stat-label">CLIENTS WORLDWIDE</div>
+                </div>
+            </div>
+            <div class="stat-item fade-in">
+                <div class="stat-inner">
+                    <div class="stat-number">4+</div>
+                    <div class="stat-label">YEARS EXPERIENCE</div>
+                </div>
+            </div>
+            <div class="stat-item fade-in">
+                <div class="stat-inner">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">DEDICATION</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Tech Stack Section -->
-    <section id="stack" class="tech-stack section">
-        <div class="tech-stack-bg">
-            <div class="tech-shape tech-shape-1"></div>
-            <div class="tech-shape tech-shape-2"></div>
-        </div>
-        <div class="container">
-            <h2 class="section-title"><span>Technologies</span>My Tech Stack</h2>
-            <div class="stack-container">
-                <div class="stack-card fade-in">
-                    <div class="stack-card-header">
-                        <div class="stack-card-icon">
-                            <i class="fas fa-desktop"></i>
-                        </div>
-                        <h3>Frontend</h3>
-                        <p>Creating beautiful, responsive user interfaces</p>
-                    </div>
-                    <div class="stack-card-body">
-                        <div class="stack-items">
-                            <div class="stack-item">
-                                <i class="fab fa-html5"></i>
-                                <span>HTML5</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-css3-alt"></i>
-                                <span>CSS3/SASS</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-js"></i>
-                                <span>JavaScript (ES6+)</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-react"></i>
-                                <span>React</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-vuejs"></i>
-                                <span>Vue.js</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-angular"></i>
-                                <span>Angular</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-node-js"></i>
-                                <span>TypeScript</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-paint-brush"></i>
-                                <span>Tailwind CSS</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-code"></i>
-                                <span>Next.js</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-bolt"></i>
-                                <span>Redux</span>
-                            </div>
-                        </div>
-                        <a href="#" class="stack-pill">Explore Frontend Projects</a>
-                    </div>
-                </div>
-                <div class="stack-card mobile fade-in delay-2">
-                    <div class="stack-card-header">
-                        <div class="stack-card-icon">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <h3>Mobile</h3>
-                        <p>Building native-like mobile experiences</p>
-                    </div>
-                    <div class="stack-card-body">
-                        <div class="stack-items">
-                            <div class="stack-item">
-                                <i class="fab fa-react"></i>
-                                <span>React Native</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-swift"></i>
-                                <span>Swift</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-android"></i>
-                                <span>Kotlin</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-mobile-alt"></i>
-                                <span>Flutter</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-rocket"></i>
-                                <span>Firebase</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-tablet-alt"></i>
-                                <span>Responsive Design</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-universal-access"></i>
-                                <span>Accessibility</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>Performance</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-store"></i>
-                                <span>App Store</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-google-play"></i>
-                                <span>Google Play</span>
-                            </div>
-                        </div>
-                        <a href="#" class="stack-pill">Explore Mobile Projects</a>
-                    </div>
-                </div>
-                <div class="stack-card backend fade-in delay-4">
-                    <div class="stack-card-header">
-                        <div class="stack-card-icon">
-                            <i class="fas fa-server"></i>
-                        </div>
-                        <h3>Backend</h3>
-                        <p>Building robust and scalable server systems</p>
-                    </div>
-                    <div class="stack-card-body">
-                        <div class="stack-items">
-                            <div class="stack-item">
-                                <i class="fas fa-cogs"></i>
-                                <span>Golang</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-bolt"></i>
-                                <span>Elixir</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-cubes"></i>
-                                <span>Phoenix</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-database"></i>
-                                <span>PostgreSQL</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-server"></i>
-                                <span>RESTful APIs</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-exchange-alt"></i>
-                                <span>GraphQL</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>Auth Systems</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-cloud"></i>
-                                <span>AWS/GCP</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fab fa-docker"></i>
-                                <span>Docker</span>
-                            </div>
-                            <div class="stack-item">
-                                <i class="fas fa-dharmachakra"></i>
-                                <span>Kubernetes</span>
-                            </div>
-                        </div>
-                        <a href="#" class="stack-pill">Explore Backend Projects</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects" class="projects section">
-        <div class="projects-bg">
-            <div class="projects-shape projects-shape-1"></div>
-            <div class="projects-shape projects-shape-2"></div>
-        </div>
-        <div class="container">
-            <h2 class="section-title"><span>Portfolio</span>Featured Projects</h2>
-            <div class="projects-nav">
-                <button class="project-filter active" data-filter="all">All</button>
-                <button class="project-filter" data-filter="web">Web</button>
-                <button class="project-filter" data-filter="mobile">Mobile</button>
-                <button class="project-filter" data-filter="backend">Backend</button>
-            </div>
-            <div class="projects-grid">
-                <div class="project-card fade-in" data-category="web">
-                    <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1556742031-c6961e8560b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=350&q=80"
-                            alt="E-Commerce Platform">
-                        <div class="project-overlay">
-                            <a href="https://github.com/King-Dorji" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/King-Dorji" class="project-link"><i
-                                    class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Node.js</span>
-                            <span class="project-tag">MongoDB</span>
-                        </div>
-                        <h3>E-Commerce Platform</h3>
-                        <p>A full-featured e-commerce platform with real-time inventory management, payment integration,
-                            and analytics dashboard.</p>
-                    </div>
-                </div>
-                <div class="project-card fade-in delay-2" data-category="mobile">
-                    <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=350&q=80"
-                            alt="Health Tracking App">
-                        <div class="project-overlay">
-                            <a href="https://github.com/King-Dorji" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/King-Dorji" class="project-link"><i
-                                    class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">React Native</span>
-                            <span class="project-tag">Firebase</span>
-                            <span class="project-tag">Golang</span>
-                        </div>
-                        <h3>Health Tracking App</h3>
-                        <p>A cross-platform mobile application for tracking fitness goals, nutrition, and wellness
-                            metrics with data visualization.</p>
-                    </div>
-                </div>
-                <div class="project-card fade-in delay-4" data-category="backend">
-                    <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1600267204091-5c1ab8b10c02?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=350&q=80"
-                            alt="Real-time Collaboration Tool">
-                        <div class="project-overlay">
-                            <a href="https://github.com/King-Dorji" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/King-Dorji" class="project-link"><i
-                                    class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">Elixir</span>
-                            <span class="project-tag">Phoenix</span>
-                            <span class="project-tag">Vue.js</span>
-                        </div>
-                        <h3>Real-time Collaboration Tool</h3>
-                        <p>A collaborative platform for teams with real-time document editing, task management, and
-                            communication features.</p>
-                    </div>
-                </div>
-                <div class="project-card fade-in" data-category="web">
-                    <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=350&q=80"
-                            alt="AI-Powered Analytics Dashboard">
-                        <div class="project-overlay">
-                            <a href="https://github.com/King-Dorji" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/King-Dorji" class="project-link"><i
-                                    class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">Next.js</span>
-                            <span class="project-tag">TensorFlow</span>
-                            <span class="project-tag">D3.js</span>
-                        </div>
-                        <h3>AI-Powered Analytics Dashboard</h3>
-                        <p>A sophisticated dashboard that leverages machine learning to provide predictive analytics and
-                            data visualization.</p>
-                    </div>
-                </div>
-                <div class="project-card fade-in delay-2" data-category="mobile">
-                    <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1617802690992-15d93263d3a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=350&q=80"
-                            alt="Augmented Reality Shopping App">
-                        <div class="project-overlay">
-                            <a href="https://github.com/King-Dorji" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/King-Dorji" class="project-link"><i
-                                    class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">ARKit</span>
-                            <span class="project-tag">Swift</span>
-                            <span class="project-tag">Cloud</span>
-                        </div>
-                        <h3>Augmented Reality Shopping App</h3>
-                        <p>An innovative shopping app that uses AR to allow users to visualize products in their home
-                            before purchasing.</p>
-                    </div>
-                </div>
-                <div class="project-card fade-in delay-4" data-category="backend">
-                    <div class="project-img">
-                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&h=350&q=80"
-                            alt="Microservices Architecture">
-                        <div class="project-overlay">
-                            <a href="https://github.com/King-Dorji" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/King-Dorji" class="project-link"><i
-                                    class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-tags">
-                            <span class="project-tag">Golang</span>
-                            <span class="project-tag">Kubernetes</span>
-                            <span class="project-tag">gRPC</span>
-                        </div>
-                        <h3>Microservices Architecture</h3>
-                        <p>A scalable microservices architecture for a high-traffic application with service discovery
-                            and load balancing.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="experience section">
-        <div class="experience-bg">
-            <div class="exp-shape exp-shape-1"></div>
-            <div class="exp-shape exp-shape-2"></div>
-        </div>
-        <div class="container">
-            <h2 class="section-title"><span>Work History</span>My Experience</h2>
-            <div class="timeline">
-                <div class="timeline-item zoom-in">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2021 - Present</span>
-                        <h3>Senior Software Engineer</h3>
-                        <h4>Cashia Ltd.</h4>
-                        <p>Working with the team in development of scalable web and mobile applications. Architecting
-                            microservices using Golang and Elixir. Mentoring junior developers and implementing best
-                            practices for code quality and performance.</p>
-                        <div class="timeline-skills">
-                            <span class="timeline-skill">React</span>
-                            <span class="timeline-skill">Golang</span>
-                            <span class="timeline-skill">Elixir</span>
-                            <span class="timeline-skill">Metabase Integration</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item zoom-in">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2023 - Present</span>
-                        <h3>Full Stack Developer</h3>
-                        <h4>Be Your Best Foundation</h4>
-                        <p>Developed responsive web applications using React and Vue.js. Implemented component libraries
-                            and design systems. Collaborated with UX/UI designers to create intuitive user interfaces
-                            and ensure accessibility standards.</p>
-                        <div class="timeline-skills">
-                            <span class="timeline-skill">JavaScript</span>
-                            <span class="timeline-skill">React</span>
-                            <span class="timeline-skill">Vue.js</span>
-                            <span class="timeline-skill">UI/UX</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item zoom-in">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2019 - 2022</span>
-                        <h3>Mobile Developer</h3>
-                        <h4>UpWork Freelance Platform</h4>
-                        <p>Built cross-platform mobile applications using React Native and Flutter. Implemented
-                            integration with RESTful APIs and third-party services. Optimized app performance and user
-                            experience for both iOS and Android platforms.</p>
-                        <div class="timeline-skills">
-                            <span class="timeline-skill">React Native</span>
-                            <span class="timeline-skill">Flutter</span>
-                            <span class="timeline-skill">iOS</span>
-                            <span class="timeline-skill">Android</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="timeline-item zoom-in">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">2017 - 2019</span>
-                        <h3>Junior Developer</h3>
-                        <h4>CIT CLUB MMU</h4>
-                        <p>Started my career developing web applications using JavaScript and PHP. Worked on frontend
-                            interfaces and simple backend systems. Gained experience in agile development methodologies
-                            and version control systems.</p>
-                        <div class="timeline-skills">
-                            <span class="timeline-skill">JavaScript</span>
-                            <span class="timeline-skill">PHP</span>
-                            <span class="timeline-skill">HTML/CSS</span>
-                            <span class="timeline-skill">Git</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="testimonials section">
-        <div class="testimonials-bg">
-            <div class="test-shape test-shape-1"></div>
-            <div class="test-shape test-shape-2"></div>
-        </div>
-        <div class="container">
-            <h2 class="section-title"><span>Client Feedback</span>Testimonials</h2>
-            <div class="testimonials-container" id="testimonialsSlider">
-                <div class="testimonial-card fade-in">
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="testimonial-text">King'ori is an exceptional developer who consistently delivers
-                        high-quality work. His expertise in both frontend and backend technologies allowed our team to
-                        build a robust platform in record time. His attention to detail and problem-solving skills are
-                        outstanding.</p>
-                    <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="Bonn.png" alt="John Cooper">
-                        </div>
-                        <div class="author-info">
-                            <h4>Bonnke Mulaama</h4>
-                            <p>MD, BYB Foundation</p>
-                            <div class="testimonial-rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card fade-in delay-2">
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="testimonial-text">Working with King'ori was a game-changer for our startup. He transformed
-                        our vision into a beautiful, functional mobile app that our users love. His expertise in React
-                        Native and backend technologies helped us launch faster than expected. Highly recommended!</p>
-                    <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="Abu.png" alt="Sarah Johnson">
-                        </div>
-                        <div class="author-info">
-                            <h4>Abubakar Towfiq</h4>
-                            <p>Senior QA, Cashia Ltd.</p>
-                            <div class="testimonial-rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial-card fade-in delay-4">
-                    <div class="testimonial-quote">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p class="testimonial-text">King'ori's work on our e-commerce platform was exceptional. His deep
-                        understanding of both frontend design principles and backend architecture resulted in a seamless
-                        shopping experience for our customers. He's not just a developer but a true problem solver.</p>
-                    <div class="testimonial-author">
-                        <div class="author-img">
-                            <img src="Huss.png" alt="Michael Rodriguez">
-                        </div>
-                        <div class="author-info">
-                            <h4>Hussein Omar</h4>
-                            <p>CTO, Awjaad</p>
-                            <div class="testimonial-rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact section">
-        <div class="contact-bg">
-            <div class="contact-shape contact-shape-1"></div>
-            <div class="contact-shape contact-shape-2"></div>
-        </div>
-        <div class="container">
-            <h2 class="section-title"><span>Get In Touch</span>Contact Me</h2>
-            <div class="contact-container">
-                <div class="contact-info fade-in">
-                    <h3>Let's Talk About Your Project</h3>
-                    <p>I'm always open to discussing new projects, creative ideas, or opportunities to be part of your
-                        vision. Feel free to reach out using the form or via my contact information.</p>
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Location</h4>
-                                <p>Nairobi, Kenya</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Email</h4>
-                                <a href="mailto:hello@kingori.dev">hello@kingori.dev</a>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="fas fa-phone-alt"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Phone</h4>
-                                <a href="tel:+254789 342 178">+254 789 342 178</a>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="far fa-calendar-alt"></i>
-                            </div>
-                            <div class="contact-text">
-                                <h4>Availability</h4>
-                                <p>Monday - Friday, 9AM - 4PM</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="contact-form-container fade-in">
-                    <form id="contactForm" class="contact-form" action="https://formcarry.com/s/IjYQE2Ak8S"
-                        method="POST" accept-charset="UTF-8">
-                        <div class="form-group">
-                            <label for="name" class="form-label">Your Name</label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="John Doe"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-label">Your Email</label>
-                            <input type="email" id="email" name="email" class="form-control"
-                                placeholder="john@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject" class="form-label">Subject</label>
-                            <input type="text" id="subject" name="subject" class="form-control"
-                                placeholder="Project Inquiry">
-                        </div>
-                        <div class="form-group">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea id="message" name="message" class="form-control"
-                                placeholder="Tell me about your project" rows="5" required></textarea>
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" id="terms" class="form-check-input" required>
-                            <label for="terms" class="form-check-label">I agree to the terms and privacy policy</label>
-                        </div>
-                        <!-- Hidden input field to prevent spam -->
-                        <input type="hidden" name="_gotcha">
-                        <button type="submit" id="submit-btn" class="btn"><i class="fas fa-paper-plane"></i> Send
-                            Message</button>
-                    </form>
-                </div>
-                <div id="formAlert" class="form-alert">
-                    <div class="alert-content">
-                        <div class="alert-icon">
-                            <i class="fas fa-check-circle success-icon"></i>
-                            <i class="fas fa-times-circle error-icon"></i>
-                        </div>
-                        <div class="alert-message" id="alertMessage"></div>
-                        <button class="alert-close" id="alertClose"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Contact CTA -->
+    <section class="contact-cta" id="contact">
+        <h2 class="fade-in">Have a project<br>in mind?</h2>
+        <a href="mailto:hello@kingori.dev" class="cta-button fade-in">LET'S TALK</a>
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-bg">
-            <div class="footer-shape footer-shape-1"></div>
-            <div class="footer-shape footer-shape-2"></div>
-        </div>
-        <div class="container footer-container">
-            <div class="footer-brand">
-                <div class="logo footer-logo">
-                    <div class="logo-icon">KN</div>
-                    King'ori
-                </div>
-                <p class="footer-text">Senior Software Engineer specializing in creating beautiful, functional, and
-                    performant applications for web and mobile platforms.</p>
-                <div class="social-links">
-                    <a href="https://github.com/King-Dorji" class="social-link">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="https://www.linkedin.com/in/joe-denis-kingori/" class="social-link">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://twitter.com/kajowacollects" class="social-link">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="https://stackoverflow.com/users/15624475/joe-denis" class="social-link">
-                        <i class="fab fa-stack-overflow"></i>
-                    </a>
-                </div>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-bio">
+                <h3>King'ori Ng'ang'a</h3>
+                <p>Senior software engineer based in Nairobi, Kenya. Specializing in full-stack development with a focus on creating exceptional digital products.</p>
             </div>
-            <div>
-                <h3 class="footer-heading">Quick Links</h3>
-                <div class="footer-links">
-                    <a href="#home" class="footer-link"><i class="fas fa-chevron-right"></i> Home</a>
-                    <a href="#about" class="footer-link"><i class="fas fa-chevron-right"></i> About</a>
-                    <a href="#stack" class="footer-link"><i class="fas fa-chevron-right"></i> Tech Stack</a>
-                    <a href="#projects" class="footer-link"><i class="fas fa-chevron-right"></i> Projects</a>
-                    <a href="#contact" class="footer-link"><i class="fas fa-chevron-right"></i> Contact</a>
-                </div>
+            <div class="footer-links">
+                <h4>Services</h4>
+                <a href="#services">Web Development</a>
+                <a href="#services">Mobile Apps</a>
+                <a href="#services">Backend Systems</a>
+                <a href="#services">Design</a>
             </div>
-            <div>
-                <h3 class="footer-heading">Services</h3>
-                <div class="footer-links">
-                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> Web Development</a>
-                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> Mobile Apps</a>
-                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> UI/UX Design</a>
-                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> Backend Systems</a>
-                    <a href="#" class="footer-link"><i class="fas fa-chevron-right"></i> Consulting</a>
-                </div>
+            <div class="footer-links">
+                <h4>Connect</h4>
+                <a href="https://github.com/King-Dorji" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/joe-denis-kingori/" target="_blank">LinkedIn</a>
+                <a href="https://twitter.com/kajowacollects" target="_blank">Twitter</a>
             </div>
-            <div>
-                <h3 class="footer-heading">Newsletter</h3>
-                <p class="footer-text">Subscribe to receive updates on my latest projects and tech articles.</p>
-                <div class="footer-newsletter">
-                    <form class="newsletter-form">
-                        <input type="email" placeholder="Your Email" class="newsletter-input" required>
-                        <button type="submit" class="newsletter-btn"><i class="fas fa-paper-plane"></i></button>
-                    </form>
-                </div>
+            <div class="footer-links">
+                <h4>Contact</h4>
+                <a href="mailto:kingoridenis74@gmail.com">hello@kingori.dev</a>
+                <a href="tel:+254789342178">+254 789 342 178</a>
             </div>
         </div>
-        <div class="copyright">
-            <p>&copy; <span id="currentYear"></span> King'ori Ng'ang'a. All rights reserved.</p>
+        <div class="footer-bottom">
+            <div>© 2024 King'ori Ng'ang'a</div>
+            <div class="social-links">
+                <a href="https://github.com/King-Dorji" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/joe-denis-kingori/" target="_blank">LinkedIn</a>
+                <a href="https://twitter.com/kajowacollects" target="_blank">Twitter</a>
+            </div>
         </div>
     </footer>
 
-    <!-- Go to Top Button -->
-    <a href="#" class="go-top" id="goTop">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Consolidated DOM ready functions
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize particles.js if available
-            initializeParticles();
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
 
-            // Setup hamburger menu
-            setupMobileMenu();
-
-            // Add hero visibility classes
-            initializeHeroVisibility();
-
-            // Setup tech stack to projects navigation
-            setupTechStackNavigation();
-
-            // Setup form submission
-            setupContactForm();
-
-            // Setup counter animation observation
-            setupCounterAnimations();
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         });
 
-        // Scroll event handlers
-        window.onscroll = function () {
-            scrollFunction();
-            scrollProgressBar();
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effect
+        const hoverElements = document.querySelectorAll('a, button, .service-item, .cta-button');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-menu a');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Three.js Hero Scene
+        const heroCanvas = document.getElementById('hero-canvas');
+        const heroScene = new THREE.Scene();
+        const heroCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
+        heroRenderer.setSize(window.innerWidth, window.innerHeight);
+        heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Create floating geometric shapes
+        const geometries = [
+            new THREE.TorusGeometry(0.7, 0.2, 16, 100),
+            new THREE.OctahedronGeometry(0.8),
+            new THREE.IcosahedronGeometry(0.8, 0),
+        ];
+
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x6366f1,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+
+        const shapes = [];
+        geometries.forEach((geo, i) => {
+            const mesh = new THREE.Mesh(geo, material);
+            mesh.position.x = (i - 1) * 3;
+            mesh.position.z = -5;
+            heroScene.add(mesh);
+            shapes.push(mesh);
+        });
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        heroScene.add(ambientLight);
+
+        const pointLight = new THREE.PointLight(0x6366f1, 1);
+        pointLight.position.set(5, 5, 5);
+        heroScene.add(pointLight);
+
+        heroCamera.position.z = 5;
+
+        // Hero Animation
+        function animateHero() {
+            requestAnimationFrame(animateHero);
+
+            shapes.forEach((shape, i) => {
+                shape.rotation.x += 0.002;
+                shape.rotation.y += 0.003;
+                shape.position.y = Math.sin(Date.now() * 0.001 + i) * 0.5;
+            });
+
+            heroRenderer.render(heroScene, heroCamera);
+        }
+        animateHero();
+
+        // Three.js Approach Scene (Particle Field)
+        const approachCanvas = document.getElementById('approach-canvas');
+        const approachScene = new THREE.Scene();
+        const approachCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const approachRenderer = new THREE.WebGLRenderer({ canvas: approachCanvas, alpha: true, antialias: true });
+        approachRenderer.setSize(window.innerWidth, window.innerHeight);
+        approachRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Create particle field
+        const particleCount = 1000;
+        const particles = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 20;
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const particleMaterial = new THREE.PointsMaterial({
+            color: 0x6366f1,
+            size: 0.02,
+            transparent: true,
+            opacity: 0.6
+        });
+
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        approachScene.add(particleSystem);
+
+        approachCamera.position.z = 5;
+
+        // Approach Animation
+        function animateApproach() {
+            requestAnimationFrame(animateApproach);
+
+            particleSystem.rotation.y += 0.001;
+            particleSystem.rotation.x += 0.0005;
+
+            approachRenderer.render(approachScene, approachCamera);
+        }
+        animateApproach();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            heroCamera.aspect = window.innerWidth / window.innerHeight;
+            heroCamera.updateProjectionMatrix();
+            heroRenderer.setSize(window.innerWidth, window.innerHeight);
+
+            approachCamera.aspect = window.innerWidth / window.innerHeight;
+            approachCamera.updateProjectionMatrix();
+            approachRenderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Mouse interaction with hero scene
+        let mouseXNorm = 0;
+        let mouseYNorm = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseXNorm = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseYNorm = -(e.clientY / window.innerHeight) * 2 + 1;
+
+            shapes.forEach((shape, i) => {
+                shape.rotation.x = mouseYNorm * 0.5;
+                shape.rotation.y = mouseXNorm * 0.5;
+            });
+        });
+
+        // Fade in on scroll
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
         };
 
-        // Go to top button click handler
-        document.getElementById("goTop")?.addEventListener("click", function (e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        });
-
-        // Type writer effect for hero title
-        window.addEventListener('load', function () {
-            const typingElement = document.querySelector('.typing-text');
-            if (typingElement) {
-                const text = typingElement.textContent;
-                let i = 0;
-                typingElement.textContent = '';
-
-                setTimeout(function typeWriter() {
-                    if (i < text.length) {
-                        typingElement.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(typeWriter, 100);
-                    }
-                }, 1000);
-            }
-        });
-
-        // Dark mode toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.documentElement;
-
-        if (themeToggle) {
-            // Check for saved theme preference
-            if (localStorage.getItem('theme') === 'dark') {
-                body.classList.add('dark-mode');
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-            }
-
-            themeToggle.addEventListener('click', function () {
-                body.classList.toggle('dark-mode');
-
-                if (body.classList.contains('dark-mode')) {
-                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                    localStorage.setItem('theme', 'dark');
-                } else {
-                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                    localStorage.setItem('theme', 'light');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
                 }
             });
-        }
+        }, observerOptions);
 
-        // Preloader functionality
-        window.addEventListener('load', function () {
-            const preloader = document.querySelector('.preloader');
-            const loaderProgress = document.querySelector('.loader-progress');
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-            if (preloader) {
-                // Animate the progress bar to 100%
-                let width = 0;
-                const interval = setInterval(function () {
-                    if (width >= 100) {
-                        clearInterval(interval);
-                        setTimeout(function () {
-                            preloader.classList.add('preloader-finish');
-                            setTimeout(function () {
-                                preloader.style.display = 'none';
-
-                                // Initialize hero elements visibility after preloader finishes
-                                document.querySelectorAll('.hero-content, .hero-image').forEach(element => {
-                                    element.classList.add('active');
-                                });
-
-                                // Start counters
-                                setTimeout(function () {
-                                    animateCounter('experienceCounter', 4, 1000);
-                                    animateCounter('projectsCounter', 50, 2000);
-                                    animateCounter('clientsCounter', 30, 1500);
-                                }, 500);
-                            }, 500);
-                        }, 600);
-                    } else {
-                        width += 2;
-                        if (loaderProgress) {
-                            loaderProgress.style.width = width + '%';
-                        }
+        // Animate stat numbers
+        const statNumbers = document.querySelectorAll('.stat-number');
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const finalValue = entry.target.textContent;
+                    
+                    if (!isNaN(parseInt(finalValue))) {
+                        const value = parseInt(finalValue);
+                        const duration = 2000;
+                        const steps = 60;
+                        const increment = value / steps;
+                        let current = 0;
+                        
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= value) {
+                                entry.target.textContent = finalValue;
+                                clearInterval(timer);
+                            } else {
+                                entry.target.textContent = Math.floor(current) + (finalValue.includes('+') ? '+' : finalValue.includes('%') ? '%' : '');
+                            }
+                        }, duration / steps);
                     }
-                }, 40);
-            }
-        });
-
-        // Helper functions
-        function initializeParticles() {
-            if (typeof particlesJS !== 'undefined') {
-                // Initialize particles-tech
-                particlesJS("particles-tech", {
-                    particles: {
-                        number: { value: 80, density: { enable: true, value_area: 800 } },
-                        color: { value: ["#5C62F9", "#FF7D3B", "#13F287"] },
-                        shape: {
-                            type: "circle",
-                            stroke: { width: 0, color: "#000000" },
-                            polygon: { nb_sides: 5 }
-                        },
-                        opacity: {
-                            value: 0.5,
-                            random: false,
-                            anim: { enable: false }
-                        },
-                        size: {
-                            value: 3,
-                            random: true,
-                            anim: { enable: false }
-                        },
-                        line_linked: {
-                            enable: true,
-                            distance: 150,
-                            color: "#5C62F9",
-                            opacity: 0.4,
-                            width: 1
-                        },
-                        move: {
-                            enable: true,
-                            speed: 2,
-                            direction: "none",
-                            random: false,
-                            straight: false,
-                            out_mode: "out",
-                            bounce: false
-                        }
-                    },
-                    interactivity: {
-                        detect_on: "canvas",
-                        events: {
-                            onhover: { enable: true, mode: "grab" },
-                            onclick: { enable: true, mode: "push" },
-                            resize: true
-                        },
-                        modes: {
-                            grab: { distance: 140, line_linked: { opacity: 1 } },
-                            push: { particles_nb: 4 }
-                        }
-                    },
-                    retina_detect: true
-                });
-
-                // Initialize particles-js
-                particlesJS('particles-js', {
-                    particles: {
-                        number: {
-                            value: 50,
-                            density: {
-                                enable: true,
-                                value_area: 800
-                            }
-                        },
-                        color: {
-                            value: "#5C62F9"
-                        },
-                        shape: {
-                            type: "circle",
-                            stroke: {
-                                width: 0,
-                                color: "#000000"
-                            }
-                        },
-                        opacity: {
-                            value: 0.4,
-                            random: true,
-                            anim: {
-                                enable: true,
-                                speed: 1,
-                                opacity_min: 0.1,
-                                sync: false
-                            }
-                        },
-                        size: {
-                            value: 3,
-                            random: true,
-                            anim: {
-                                enable: true,
-                                speed: 2,
-                                size_min: 0.1,
-                                sync: false
-                            }
-                        },
-                        line_linked: {
-                            enable: true,
-                            distance: 150,
-                            color: "#5C62F9",
-                            opacity: 0.2,
-                            width: 1
-                        },
-                        move: {
-                            enable: true,
-                            speed: 1,
-                            direction: "none",
-                            random: true,
-                            straight: false,
-                            out_mode: "out",
-                            bounce: false,
-                            attract: {
-                                enable: false,
-                                rotateX: 600,
-                                rotateY: 1200
-                            }
-                        }
-                    },
-                    interactivity: {
-                        detect_on: "canvas",
-                        events: {
-                            onhover: {
-                                enable: true,
-                                mode: "bubble"
-                            },
-                            onclick: {
-                                enable: true,
-                                mode: "push"
-                            },
-                            resize: true
-                        },
-                        modes: {
-                            grab: {
-                                distance: 400,
-                                line_linked: {
-                                    opacity: 1
-                                }
-                            },
-                            bubble: {
-                                distance: 200,
-                                size: 6,
-                                duration: 2,
-                                opacity: 0.8,
-                                speed: 3
-                            },
-                            repulse: {
-                                distance: 200,
-                                duration: 0.4
-                            },
-                            push: {
-                                particles_nb: 4
-                            },
-                            remove: {
-                                particles_nb: 2
-                            }
-                        }
-                    },
-                    retina_detect: true
-                });
-            }
-        }
-
-        function setupMobileMenu() {
-            const hamburger = document.getElementById('hamburger');
-            const navMenu = document.getElementById('navMenu');
-
-            if (hamburger && navMenu) {
-                // Replace existing handler with improved one
-                const newHamburger = hamburger.cloneNode(true);
-                hamburger.parentNode.replaceChild(newHamburger, hamburger);
-
-                newHamburger.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    this.classList.toggle('active');
-                    navMenu.classList.toggle('active');
-                });
-
-                // Close on outside click
-                document.addEventListener('click', function (e) {
-                    if (!navMenu.classList.contains('active')) return;
-                    if (!navMenu.contains(e.target) && !newHamburger.contains(e.target)) {
-                        navMenu.classList.remove('active');
-                        newHamburger.classList.remove('active');
-                    }
-                });
-
-                // Close on ESC key press
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
-                        navMenu.classList.remove('active');
-                        newHamburger.classList.remove('active');
-                    }
-                });
-
-                // Close when clicking nav links
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.addEventListener('click', () => {
-                        const hamButton = document.getElementById('hamburger');
-                        if (hamButton) {
-                            hamButton.classList.remove('active');
-                        }
-                        navMenu.classList.remove('active');
-                    });
-                });
-            }
-        }
-
-        function scrollProgressBar() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-
-            const progressBar = document.getElementById("progressBar");
-            if (progressBar) {
-                progressBar.style.width = scrolled + "%";
-            }
-        }
-
-        function scrollFunction() {
-            const goTop = document.getElementById("goTop");
-            if (goTop) {
-                if (document.body.scrollTop > 500 || document.documentElement.scrollTop > 500) {
-                    goTop.classList.add("active");
-                } else {
-                    goTop.classList.remove("active");
-                }
-            }
-
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // Header scroll effect
-            const header = document.querySelector('.header');
-            if (header) {
-                if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            }
-
-            // Reveal animations on scroll
-            const reveals = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .zoom-in');
-
-            reveals.forEach(element => {
-                const windowHeight = window.innerHeight;
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-
-                if (elementTop < windowHeight - elementVisible) {
-                    element.classList.add('active');
+                    
+                    statObserver.unobserve(entry.target);
                 }
             });
-        }
+        }, { threshold: 0.5 });
 
-        function initializeHeroVisibility() {
-            setTimeout(function () {
-                const heroContent = document.querySelector('.hero-content');
-                const heroImage = document.querySelector('.hero-image');
+        statNumbers.forEach(stat => statObserver.observe(stat));
 
-                if (heroContent) {
-                    heroContent.classList.add('active');
-                }
-
-                if (heroImage) {
-                    heroImage.classList.add('active');
-                }
-
-                const heroElements = document.querySelectorAll('.hero .fade-in, .hero .slide-in-left, .hero .slide-in-right, .hero .zoom-in');
-                heroElements.forEach(element => {
-                    element.classList.add('active');
-                });
-            }, 100);
-        }
-
-        function setupTechStackNavigation() {
-            const exploreFrontendBtn = document.querySelector('.stack-card:nth-child(1) .stack-pill');
-            const exploreMobileBtn = document.querySelector('.stack-card.mobile .stack-pill');
-            const exploreBackendBtn = document.querySelector('.stack-card.backend .stack-pill');
-
-            const projectFilters = document.querySelectorAll('.project-filter');
-
-            function navigateToProjects(filterValue) {
-                window.location.href = '#projects';
-
-                projectFilters.forEach(filter => {
-                    if (filter.getAttribute('data-filter') === filterValue) {
-                        projectFilters.forEach(btn => btn.classList.remove('active'));
-                        filter.classList.add('active');
-                        filter.click();
-                    }
-                });
-            }
-
-            if (exploreFrontendBtn) {
-                exploreFrontendBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    navigateToProjects('web');
-                });
-            }
-
-            if (exploreMobileBtn) {
-                exploreMobileBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    navigateToProjects('mobile');
-                });
-            }
-
-            if (exploreBackendBtn) {
-                exploreBackendBtn.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    navigateToProjects('backend');
-                });
-            }
-
-            // Setup project filters
-            projectFilters.forEach(button => {
-                button.addEventListener('click', () => {
-                    projectFilters.forEach(btn => btn.classList.remove('active'));
-                    button.classList.add('active');
-
-                    const filterValue = button.getAttribute('data-filter');
-                    const projectCards = document.querySelectorAll('.project-card');
-
-                    projectCards.forEach(card => {
-                        const category = card.getAttribute('data-category');
-
-                        if (filterValue === 'all' || filterValue === category) {
-                            card.style.display = 'block';
-                            setTimeout(() => {
-                                card.style.opacity = '1';
-                                card.style.transform = 'translateY(0)';
-                            }, 200);
-                        } else {
-                            card.style.opacity = '0';
-                            card.style.transform = 'translateY(20px)';
-                            setTimeout(() => {
-                                card.style.display = 'none';
-                            }, 300);
-                        }
-                    });
-                });
-            });
-        }
-
-        function setupContactForm() {
-            const contactForm = document.getElementById('contactForm');
-            const formAlert = document.getElementById('formAlert');
-            const alertMessage = document.getElementById('alertMessage');
-            const alertClose = document.getElementById('alertClose');
-            const submitBtn = document.getElementById('submit-btn');
-
-            if (!contactForm || !formAlert) return;
-
-            // Close alert when clicking the close button
-            if (alertClose) {
-                alertClose.addEventListener('click', function () {
-                    formAlert.classList.remove('active');
-                    setTimeout(() => {
-                        formAlert.classList.remove('success', 'error');
-                    }, 500);
-                });
-            }
-
-            // Function to show alert
-            function showAlert(message, type) {
-                if (!alertMessage || !formAlert) return;
-
-                alertMessage.textContent = message;
-                formAlert.classList.add('active', type);
-
-                // Auto hide after 5 seconds
-                setTimeout(() => {
-                    formAlert.classList.remove('active');
-                    setTimeout(() => {
-                        formAlert.classList.remove('success', 'error');
-                    }, 500);
-                }, 5000);
-            }
-
-            // Function to mask email
-            function maskEmail(email) {
-                if (!email) return '';
-
-                const parts = email.split('@');
-                if (parts.length !== 2) return email;
-
-                const name = parts[0];
-                const domain = parts[1];
-
-                // Keep first character and last character, mask the rest
-                let maskedName = name.length <= 2
-                    ? name
-                    : name.charAt(0) + '*'.repeat(name.length - 2) + name.charAt(name.length - 1);
-
-                return `${maskedName}@${domain}`;
-            }
-
-            // Handle form submission
-            contactForm.addEventListener('submit', function (e) {
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-
-                if (!submitBtn) return;
-
-                // Show loading state
-                submitBtn.classList.add('loading');
-                submitBtn.disabled = true;
-
-                // Get form data
-                const formData = new FormData(contactForm);
-
-                // Get email for logging (masked)
-                const email = document.getElementById('email')?.value;
-                const maskedEmail = maskEmail(email);
-
-                // Send to FormCarry
-                fetch(contactForm.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                })
-                    .then(response => response.json())
-                    .then(response => {
-                        // Success message
-                        showAlert('Message sent successfully! I will get back to you soon.', 'success');
-
-                        // Log masked email for tracking
-                        console.log(`Form submitted by: ${maskedEmail}`);
-
-                        // Reset form
-                        contactForm.reset();
-                    })
-                    .catch(error => {
-                        // Error message
-                        showAlert('Error sending message. Please try again or email me directly.', 'error');
-                        console.error('Form submission error:', error);
-                    })
-                    .finally(() => {
-                        // Restore button state
-                        submitBtn.classList.remove('loading');
-                        submitBtn.disabled = false;
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
                     });
+                }
             });
+        });
+
+        // Parallax effect for hero
+        let lastScrollY = window.scrollY;
+        let ticking = false;
+
+        function updateParallax() {
+            const scrollY = window.scrollY;
+            const parallaxElements = document.querySelectorAll('.parallax');
+            
+            parallaxElements.forEach((el, index) => {
+                const speed = 0.5 + (index * 0.1);
+                const yPos = -(scrollY * speed);
+                el.style.transform = `translateY(${yPos}px)`;
+            });
+            
+            ticking = false;
         }
 
-        function setupCounterAnimations() {
-            // Counter Animation
-            function animateCounter(elementId, target, duration) {
-                const element = document.getElementById(elementId);
-                if (!element) return;
-
-                const start = 0;
-                const increment = target > start ? 1 : -1;
-                let current = start;
-                const stepTime = Math.abs(Math.floor(duration / target));
-
-                const timer = setInterval(() => {
-                    current += increment;
-                    element.textContent = current + "+";
-                    if (current === target) {
-                        clearInterval(timer);
-                    }
-                }, stepTime);
+        window.addEventListener('scroll', () => {
+            lastScrollY = window.scrollY;
+            
+            if (!ticking) {
+                window.requestAnimationFrame(updateParallax);
+                ticking = true;
             }
+        });
 
-            // Initialize counters when they come into view
-            const heroStats = document.querySelector('.hero-stats');
-            if (heroStats) {
-                const observeCounters = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            animateCounter('experienceCounter', 4, 1000);
-                            animateCounter('projectsCounter', 50, 2000);
-                            animateCounter('clientsCounter', 30, 1500);
-                            observeCounters.disconnect();
-                        }
-                    });
-                }, { threshold: 0.5 });
-
-                observeCounters.observe(heroStats);
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // Find the email link in the contact section
-            const emailLink = document.querySelector('.contact-text a[href^="mailto:hello@kingori.dev"]');
-
-            if (emailLink) {
-                // Update href to prevent default email client from opening
-                emailLink.setAttribute('href', '#contactForm');
-
-                // Change the link behavior to focus on contact form
-                emailLink.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    // Get the name input field
-                    const nameField = document.getElementById('name');
-
-                    if (nameField) {
-                        // Scroll to the form
-                        nameField.scrollIntoView({ behavior: 'smooth' });
-
-                        // Focus and highlight the input field
-                        setTimeout(() => {
-                            nameField.focus();
-
-                            // Add a brief highlight effect to the name field
-                            nameField.style.transition = 'box-shadow 0.3s ease';
-                            nameField.style.boxShadow = '0 0 0 3px rgba(92, 98, 249, 0.5)';
-
-                            // Remove highlight after a short delay
-                            setTimeout(() => {
-                                nameField.style.boxShadow = '';
-                            }, 1500);
-                        }, 600);
-                    }
+        // Service items
+        const serviceItems = document.querySelectorAll('.service-item');
+        serviceItems.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 0.1}s`;
+            
+            const tags = item.querySelectorAll('.tech-tag');
+            item.addEventListener('mouseenter', () => {
+                tags.forEach((tag, i) => {
+                    setTimeout(() => {
+                        tag.style.transform = 'translateY(-3px)';
+                    }, i * 50);
                 });
-            }
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                tags.forEach(tag => {
+                    tag.style.transform = 'translateY(0)';
+                });
+            });
+        });
+
+        // Approach items stagger
+        const approachItems = document.querySelectorAll('.approach-item');
+        approachItems.forEach((item, index) => {
+            item.style.transitionDelay = `${index * 0.15}s`;
+        });
+
+        // Contact CTA 3D tilt effect
+        const ctaSection = document.querySelector('.contact-cta');
+        const ctaH2 = ctaSection.querySelector('h2');
+
+        ctaSection.addEventListener('mousemove', (e) => {
+            const rect = ctaSection.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 30;
+            const rotateY = (centerX - x) / 30;
+            
+            ctaH2.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        ctaSection.addEventListener('mouseleave', () => {
+            ctaH2.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+        });
+
+        // Hide cursor on touch devices
+        if ('ontouchstart' in window) {
+            cursor.style.display = 'none';
+        }
+
+        // Smooth page load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
         });
     </script>
-    <script src="tech-stack-projects-navigation.js"></script>
 </body>
-
 </html>
