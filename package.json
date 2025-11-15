@@ -1,0 +1,22 @@
+{
+  "name": "my-portfolio",
+  "version": "1.0.0",
+  "description": "Professional portfolio showcasing backend, frontend, and AI engineering skills",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "start": "npx serve .",
+    "build": "echo 'No build step required for static site'"
+  },
+  "keywords": [
+    "portfolio",
+    "web-development",
+    "ai",
+    "backend",
+    "frontend"
+  ],
+  "author": "King'ori Ng'ang'a",
+  "license": "MIT"
+}
+
